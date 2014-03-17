@@ -15,10 +15,7 @@ html = """
  	 <input type="submit" name="st" value="Stop">
       </p>
       </form>
-   <p>
-      Button: %s<br>
-      </p>
-   </body>
+    </body>
 </html>"""
 
 def application(environ, start_response):
@@ -28,7 +25,6 @@ def application(environ, start_response):
 
    # In this idiom you must issue a list containing a default value.
 
-   age  = 'xxx'  # Returns the first age value.
    try: 
 	if (d[0][0]=="fw"):
 		print "Forward"
@@ -47,13 +43,8 @@ def application(environ, start_response):
 		system("i2cset -y 1 26 0 4")
    except IndexError:
 	pass
-   #hobbies = d.get('hobbies', []) # Returns a list of hobbies.
-
-   # Always escape user input to avoid script injection
-   #age = escape(age)
-   #hobbies = [escape(hobby) for hobby in hobbies]
-
-   response_body = html % (age or 'Empty')
+  
+   response_body = html 
 
    status = '200 OK'
 
