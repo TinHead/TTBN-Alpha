@@ -19,12 +19,13 @@ packet command;
 
 void setup()
 {
-	// I2c init address 2
+	// I2c init address 3
 	Wire.begin(3);
 	Wire.onReceive(receive_data);
+//	Wire.onRequest();
 
 	//debug serial
-	Serial.begin(9600);
+	Serial.begin(115200);
 	//setup Enable pins
 	//min speed == 100 pwm 
 	pinMode(EN0_PIN, OUTPUT);
@@ -48,11 +49,6 @@ void setup()
 
 void loop()
 {
-	get_battery();
-   	delay(1000);
-	analogWrite(EN0_PIN, 0);
-	analogWrite(EN1_PIN, 0);
-//	delay(1000);
 }
 
 void get_battery()
@@ -62,58 +58,6 @@ void get_battery()
   	Serial.println(val);
 }
 
-void go_forward(int speed)
-{
-	digitalWrite(M1_0_PIN, HIGH);
-	digitalWrite(M1_1_PIN, LOW);
-	digitalWrite(M2_0_PIN, HIGH);
-	digitalWrite(M2_1_PIN, LOW);
-
-	analogWrite(EN0_PIN, speed);
-	analogWrite(EN1_PIN, speed);	
-	
-}
-
-void go_backward(int speed)
-{
-	digitalWrite(M1_1_PIN, HIGH);
-	digitalWrite(M1_0_PIN, LOW);
-	digitalWrite(M2_1_PIN, HIGH);
-	digitalWrite(M2_0_PIN, LOW);
-
-	analogWrite(EN0_PIN, speed);
-	analogWrite(EN1_PIN, speed);	
-}
-
-void go_left(int speed)
-{
-	digitalWrite(M1_0_PIN, HIGH);
-	digitalWrite(M1_1_PIN, LOW);
-	digitalWrite(M2_1_PIN, HIGH);
-	digitalWrite(M2_0_PIN, LOW);
-
-	analogWrite(EN0_PIN, speed);
-	analogWrite(EN1_PIN, speed);	
-	
-}
-
-void go_right(int speed)
-{
-	digitalWrite(M1_1_PIN, HIGH);
-	digitalWrite(M1_0_PIN, LOW);
-	digitalWrite(M2_0_PIN, HIGH);
-	digitalWrite(M2_0_PIN, LOW);
-
-	analogWrite(EN0_PIN, speed);
-	analogWrite(EN1_PIN, speed);	
-	
-}
-
-void stop()
-{
-	analogWrite(EN0_PIN, 0);
-	analogWrite(EN1_PIN, 0);
-}
 
 float fmap(float x, float in_min, float in_max, float out_min, float out_max)
 {
@@ -122,6 +66,58 @@ float fmap(float x, float in_min, float in_max, float out_min, float out_max)
 
 void execute_command(){
 	// called when a complete packet has been received 
+	switch (command.data[0]){
+		case 1:
+			get_battery();
+		break;
+		case 2:
+		//drive motors in forward
+			drive(1, command.data[1],command.data[2]);
+		break;		
+		case 3:
+		//drive motors in backward
+			drive(2, command.data[1],command.data[2]);
+		break;
+		case 4:
+		//drive one motor fw one bw
+			drive(3, command.data[1],command.data[2]);
+		break;
+		case 5:
+			drive(4, command.data[1],command.data[2]);
+		//drive one motor bw one fw
+		break;
+	}
+}
+
+void drive(int dir, int pwm1, int pwm2){
+	analogWrite(EN0_PIN, pwm1);
+	analogWrite(EN1_PIN, pwm2);
+	switch (dir){
+		case 1:	
+			digitalWrite(M1_0_PIN, HIGH);
+			digitalWrite(M1_1_PIN, LOW);
+			digitalWrite(M2_0_PIN, HIGH);
+			digitalWrite(M2_1_PIN, LOW);
+		break;
+		case 2:
+			digitalWrite(M1_1_PIN, HIGH);
+			digitalWrite(M1_0_PIN, LOW);
+			digitalWrite(M2_1_PIN, HIGH);
+			digitalWrite(M2_0_PIN, LOW);
+		break;
+		case 3:
+			digitalWrite(M1_0_PIN, HIGH);
+			digitalWrite(M1_1_PIN, LOW);
+			digitalWrite(M2_1_PIN, HIGH);
+			digitalWrite(M2_0_PIN, LOW);
+		break;
+		case 4:
+			digitalWrite(M1_1_PIN, HIGH);
+			digitalWrite(M1_0_PIN, LOW);
+			digitalWrite(M2_0_PIN, HIGH);
+			digitalWrite(M2_1_PIN, LOW);
+		break;
+	}
 }
 
 void process(int data){
@@ -129,17 +125,13 @@ void process(int data){
 		case 0:
 			command.complete=0;
 			command.data_index=0;
-			Serial.println("Command begin");
 		break;
 		case 2:
 			command.complete=1;
-			Serial.println("Command complete");			
+			//Serial.println("Command complete");
+			execute_command();			
 		default:
-			if (command.complete=0) {
-				Serial.println("Index is: ");
-				Serial.print(command.data_index);
-				Serial.println("Adding data:");
-				Serial.println(data);
+			if (command.complete==0) {
 				command.data[command.data_index]=data;
 				command.data_index++;
 			}
@@ -152,4 +144,3 @@ void receive_data(int byteCount)
 	int data = Wire.read(); 
 	process(data);
 }
-
