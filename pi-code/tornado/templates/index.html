@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>TTBN-Alpha Control Interface</title>
+	<link rel="stylesheet" href="{{ static_url("style.css") }}" type="text/css"/>
+</head>
+<body>
+	<body onload="createImageLayer();">
+	<div id="page-wrapper">
+		<center><h1>TTBN-Alpha Control Interface</h1></center>
+		<table>
+		<tr>
+		<td>
+		<img src="http://tinhead.zapto.org:8080/?action=stream"/>
+		</td>
+		<td><center>
+		<form id="control-form" action="#" method="post">
+			<table>
+				<tr>
+					<td colspan="2"><center>
+						<button type="button" id="forward">Forward</button>
+						</center>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button type="button" id="left">Left</button>
+					</td>
+					<td>	
+						<button type="button" id="right">Right</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><center>
+						<button type="button" id="backward">Backward</button>
+						</center>
+					</td>
+				</tr>
+			</table>	
+		</form>	
+		</center>	
+		</td>
+		<td>
+			<tr>
+				<button type="button" id="left">Left</button>
+			</tr>
+			<tr>
+				<button type="button" id="left">Left</button>
+			</tr>
+
+		</td>
+		</tr>
+		</table>
+		<div id="status">Connecting...</div>
+		<ul id="messages"></ul>
+	</div>
+
+	<script src="{{ static_url("app.js") }}" type="text/javascript"></script>
+</body>
+</html>
