@@ -2,13 +2,11 @@ window.onload = function() {
 
 // Get references to elements on the page.
 var form = document.getElementById('control-form');
-//var messageField = document.getElementById('message');
-//var messagesList = document.getElementById('messages');
 var socketStatus = document.getElementById('status');
 var closeBtn = document.getElementById('close');
 
 // Create a new WebSocket.
-var socket = new WebSocket('ws://tinhead.zapto.org/command');
+var socket = new WebSocket('ws://localhost:8888/command');
 
 // Handle any errors that occur.
 socket.onerror = function(error) {
@@ -48,6 +46,10 @@ window.addEventListener('keydown', function(event) {
       	socket.send('40');
 	socketStatus.innerHTML = 'Down Key Pressed';
     break;
+    case 32: //Space
+        socket.send('32');
+        socketStatus.innerHTML = 'Space Key Pressed';	
+    break;	
   }
 }, false);
 

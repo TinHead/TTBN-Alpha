@@ -1,7 +1,16 @@
+#!/usr/bin/python
+
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
+import pigpio
+from time import sleep
 import os.path
+
+pigpio.start(port='8889')
+
+pigpio.set_servo_pulsewidth(7,0)
+pigpio.set_servo_pulsewidth(8,0)
 
 # This is our WebSocketHandler - it handles the messages
 # from the tornado server
@@ -18,8 +27,31 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 	# the client sent the message
 	def on_message(self, message):
 		self.write_message(message)
-		print message
-
+		if message == '38':
+			#up
+			print 'up'
+			pigpio.set_servo_pulsewidth(7,2500)
+			pigpio.set_servo_pulsewidth(8,500)
+		elif message == '40':
+			#down
+			print 'down'
+			pigpio.set_servo_pulsewidth(7,500)
+                        pigpio.set_servo_pulsewidth(8,2500)
+		elif message == '37':
+			#right
+			print 'right'
+			pigpio.set_servo_pulsewidth(7,500)
+                        pigpio.set_servo_pulsewidth(8,500)
+		elif message == '39':
+			#right
+			print 'left'
+			pigpio.set_servo_pulsewidth(7,2500)
+                        pigpio.set_servo_pulsewidth(8,2500)
+		elif message == '32':
+			#space	
+			print 'stop'
+			pigpio.set_servo_pulsewidth(7,0)
+                        pigpio.set_servo_pulsewidth(8,0)
 	# client disconnected
 	def on_close(self):
 		print "Client disconnected"
