@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Alpha H.U.D.</title>
-	<link rel="stylesheet" href="{{ static_url("style.css") }}" type="text/css"/>
+    <meta charset="utf-8">
+    <title>Alpha H.U.D.</title>
+    <link rel="stylesheet" href="{{ static_url("style.css") }}" type="text/css"/>
 </head>
 <body>
-	<body onload="createImageLayer();">
-	<div id="page-wrapper">
-		<center><h1>Alpha H.U.D</h1></center>
-		<table>
-		<tr>
-		<td>
-		<img src="http://localhost:8080/?action=stream"/>
-		</td>
-		<td><center>
-		<form id="control-form" action="#" method="post">
-			<table>
-				<tr>
-					<td colspan="2"><center>
-						<button type="button" id="forward">Forward</button>
-						</center>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<button type="button" id="left">Left</button>
-					</td>
-					<td>	
-						<button type="button" id="right">Right</button>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2"><center>
-						<button type="button" id="backward">Backward</button>
-						</center>
-					</td>
-				</tr>
-			</table>	
-		</form>	
-		</center>	
-		</td>
-		</tr>
-		</table>
-		<div id="status">Connecting...</div>
-		<ul id="messages"></ul>
-	</div>
-
-	<script src="{{ static_url("app.js") }}" type="text/javascript"></script>
+    <body onload="createImageLayer();">
+    <div id="page-wrapper">
+        <center><h1>Alpha H.U.D</h1></center>
+        <table>
+        <tr>
+        <td>
+<!--            <img src="{{ static_url("dummy.jpeg") }}"> -->
+        <img src="http://192.168.43.7:8080/?action=stream"/>
+        </td>
+        <td><center>
+        <form id="control-form" action="#" method="post">
+            <table>
+                <tr>
+                    <td colspan="3"><center>
+                        <button type="button" id="forward" name="forward">Forward</button>
+                        </center>
+                    </td>
+                    <td><center>
+                        <button type="button" id="cam_up" name="cam_up">Look Up</button>
+                        </center>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" id="left" name="left">Left</button>
+                    </td>
+                    </td>
+                    <td>
+                        <button type="button" id="stop" name="stop">Stop</button>
+                    </td>
+                    <td>
+                        <button type="button" id="right" name="right">Right</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><center>
+                        <button type="button" id="backward" name="back">Backward</button>
+                        </center>
+                    </td>
+                	<td><center>
+                        <button type="button" id="cam_down" name="cam_down">Look Down</button>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        </center>
+        </td>
+        </tr>
+        </table>
+        <div id="status">Connecting...</div>
+        <ul id="messages"></ul>
+    </div>
+    <script src="{{ static_url("app.js") }}" type="text/javascript"></script>
 </body>
 </html>
